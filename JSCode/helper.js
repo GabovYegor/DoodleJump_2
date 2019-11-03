@@ -13,20 +13,25 @@ function initEventListeners(game) {
     addEventListener('keydown', function (e) {
         if (e.code === 'ArrowRight') {
             game.isMoveRight = true;
-            if(!game.actor.actorCurrentStateImage === game.actor.actorShootStateImage) {
+            if(game.actor.actorCurrentStateImage !== game.actor.actorShootStateImage) {
                 game.actor.actorCurrentStateImage = game.actor.actorRightStateImage;
             }
         }
 
         if (e.code === 'ArrowLeft') {
             game.isMoveLeft = true;
-            if(!game.actor.actorCurrentStateImage === game.actor.actorShootStateImage) {
+            if(game.actor.actorCurrentStateImage !== game.actor.actorShootStateImage) {
                 game.actor.actorCurrentStateImage = game.actor.actorLeftStateImage;
             }
         }
 
         if(e.code === 'Space') {
             game.actor.actorCurrentStateImage = game.actor.actorShootStateImage;
+            game.actor.bullet.isBulletFired = true;
+            if(game.actor.bullet.yBulletLocation < 0) {
+                game.actor.bullet.xBulletLocation = game.actor.xActorLocation;
+                game.actor.bullet.yBulletLocation = game.actor.yActorLocation;
+            }
         }
     });
 

@@ -41,4 +41,19 @@ class CollisionManager {
 
         return false
     }
+
+    checkEnemyCollisionWithBullet(){
+        for(let enemy of this.mapManager.enemyMas){
+            if(enemy.yEnemyLocation + enemy.enemyHeight + this.actor.bullet.bulletHeight >= this.actor.bullet.yBulletLocation &&
+                enemy.yEnemyLocation <= this.actor.bullet.yBulletLocation &&
+                enemy.xEnemyLocation +  enemy.enemyWidth + this.actor.bullet.bulletWidth >= this.actor.bullet.xBulletLocation &&
+                enemy.xEnemyLocation <= this.actor.bullet.xBulletLocation ){
+
+                this.mapManager.enemyMas = this.mapManager.enemyMas.filter(function (el) {
+                    return el !== enemy;
+                });
+                this.mapManager.updateEnemyMasInCurrentField();
+            }
+        }
+    }
 }

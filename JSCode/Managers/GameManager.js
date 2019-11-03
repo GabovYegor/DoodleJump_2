@@ -1,3 +1,4 @@
+// gameLoopInterval, XActorSpeed, YActorSpeed, BackGroundColor, AccelarationOfGravity, ActorStyle (Abstract Factory)
 class GameManager {
     constructor(gameLoopInterval = 50) {
         this.actor = new ActorClass();
@@ -6,7 +7,6 @@ class GameManager {
         this.collisionManager = new CollisionManager(this.actor, this.mapManager);
 
         this.gameScore = 0;
-        this.commonSpeedByBlock = 20;
         this.isMoveRight = false;
         this.isMoveLeft = false;
         this.timerDescriptionGameLoop = 0;
@@ -23,6 +23,12 @@ class GameManager {
 
     gameLoop(){
         this.physicsManager.jumpCalculatePosition();
+
+        if(this.actor.bullet.isBulletFired) {
+            console.log('fired')
+            this.physicsManager.bulletCalculatePosition();
+            this.collisionManager.checkEnemyCollisionWithBullet();
+        }
 
         if(this.isMoveLeft) {
             this.physicsManager.moveLeft();

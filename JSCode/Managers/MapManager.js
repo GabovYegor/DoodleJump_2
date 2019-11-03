@@ -14,6 +14,7 @@ class MapManager {
         this.blockMasInCurrentField = [];
         this.actor = actor;
         canvas.height = window.innerHeight - 30;
+        canvas.style.backgroundImage = 'url("images/FieldSettings/Background.png")'
     }
 
     parseMapProperties(map) {
@@ -116,10 +117,18 @@ class MapManager {
             this.actor.actorWidth, this.actor.actorHeight)
     }
 
+    drawBullet() {
+        ctx.drawImage(this.actor.bullet.bulletImage, this.actor.bullet.xBulletLocation, this.actor.bullet.yBulletLocation,
+            this.actor.bullet.bulletWidth, this.actor.bullet.bulletHeight)
+    }
+
     drawMap() {
         ctx.clearRect(0, 0, this.mapWidth * this.tileWidth, this.mapHeight * this.tileHeight);
         this.drawBlocks();
         this.drawEnemies();
-        this.drawActor()
+        this.drawActor();
+        if(this.actor.bullet.isBulletFired) {
+            this.drawBullet();
+        }
     }
 }

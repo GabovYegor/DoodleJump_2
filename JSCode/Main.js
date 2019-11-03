@@ -1,2 +1,2 @@
-gameManager = new GameManager(10);
+gameManager = new GameManager(15);
 gameManager.startGameLoop()

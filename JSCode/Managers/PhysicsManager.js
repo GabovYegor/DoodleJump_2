@@ -24,10 +24,9 @@ class PhysicsManager {
     }
 
     bulletCalculatePosition(){
-        this.bulletParameter.yBulletLocation -= this.bulletParameter.bulletYSpeed;
-        if(this.bulletParameter.yBulletLocation < 0){
-            return false
+        this.actor.bullet.yBulletLocation -= this.actor.bullet.bulletYSpeed;
+        if(this.actor.bullet.yBulletLocation < 0){
+            this.actor.bullet.isBulletFired = false;
         }
-        return true
     }
 }

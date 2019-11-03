@@ -5,7 +5,6 @@ body{
 canvas{
     position: absolute;
     left: 28%;
-    background-image: url("../images/FieldSettings/Background.png");
     border: 8px double black;
 }
 
