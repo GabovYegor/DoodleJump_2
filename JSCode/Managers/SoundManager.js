@@ -1,4 +1,3 @@
 class SoundManager {
-    constructor() {
-    }
+    constructor() {}
 }

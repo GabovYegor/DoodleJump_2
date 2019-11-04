@@ -1,0 +1,21 @@
+#highScoreTableDiv {
+    position: absolute;
+    left: 25%;
+    top: 5%;
+    width: 50%;
+}
+
+
+#highScoreTableOl > li:nth-child(2n) {
+    background: white; /* Цвет фона */
+}
+
+#highScoreTableOl > li:nth-child(2n+1) {
+    background-color: black; /* Цвет фона */
+    color: white; /* Цвет текста */
+}
+
+#highScoreTableOl > li {
+    font-size: 300%;
+    margin: 2% 25%;
+}

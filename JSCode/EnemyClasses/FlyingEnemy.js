@@ -7,6 +7,7 @@ class FlyingEnemy extends BaseEnemy{
         this.enemyType = 'FlyingEnemy';
         this.enemyImage = new Image();
         this.enemyImage.src = 'images/Enemies/FlyingEnemy.png';
+        this.enemySound = new Audio('sounds/EnemySounds/killFlyingEnemySound.mp3');
     }
 
     enemyAction() {

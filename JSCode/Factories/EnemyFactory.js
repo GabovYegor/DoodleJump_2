@@ -6,6 +6,10 @@ class EnemyFactory {
                 return new FlyingEnemy(enemyID, enemyWidth, enemyHeight, xEnemyLocation, yEnemyLocation);
             }
 
+            case 'BigEnemy' : {
+                return new BigEnemy(enemyID, enemyWidth, enemyHeight, xEnemyLocation, yEnemyLocation);
+            }
+
             default: {
                 throw Error;
             }

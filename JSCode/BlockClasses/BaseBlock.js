@@ -5,7 +5,12 @@ class BaseBlock {
         this.blockHeight = blockHeight;
         this.xBlockLocation = xBlockLocation;
         this.yBlockLocation = yBlockLocation;
+        this.blockSound = new Audio('sounds/BlockSounds/commonBlockSound.mp3');
     }
 
     blockAction() {}
+
+    blockCollisionWithActorAction() {
+        this.blockSound.play();
+    }
 }

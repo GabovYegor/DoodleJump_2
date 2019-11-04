@@ -6,7 +6,15 @@ class BaseEnemy {
         this.xEnemyLocation = xEnemyLocation;
         this.yEnemyLocation = yEnemyLocation;
         this.speedFromEnemy = 20;
+        this.enemySound = 0
     }
 
     enemyAction() {}
+
+    enemyCollisionWithActorAction(isActorAbove) {
+        if (isActorAbove) {
+            this.enemySound.play();
+        }
+        else { }
+    }
 }

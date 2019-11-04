@@ -29,8 +29,9 @@ function initEventListeners(game) {
             game.actor.actorCurrentStateImage = game.actor.actorShootStateImage;
             game.actor.bullet.isBulletFired = true;
             if(game.actor.bullet.yBulletLocation < 0) {
-                game.actor.bullet.xBulletLocation = game.actor.xActorLocation;
+                game.actor.bullet.xBulletLocation = game.actor.xActorLocation + game.actor.actorWidth / 2;
                 game.actor.bullet.yBulletLocation = game.actor.yActorLocation;
+                game.actor.actorShootSound.play();
             }
         }
     });

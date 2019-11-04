@@ -1,11 +1,16 @@
 // gameLoopInterval, XActorSpeed, YActorSpeed, BackGroundColor, AccelarationOfGravity, ActorStyle (Abstract Factory)
+// mapToLoad
+
 class GameManager {
-    constructor(gameLoopInterval = 50) {
+    static currentLevel;
+    constructor(gameLoopInterval = 20, levelNumber = 0) {
         this.actor = new ActorClass();
+        this.highScoreTable = new HighScoreTableManager();
         this.mapManager = new MapManager(this.actor);
         this.physicsManager = new PhysicsManager(this.actor);
         this.collisionManager = new CollisionManager(this.actor, this.mapManager);
 
+        this.levelNumber = levelNumber;
         this.gameScore = 0;
         this.isMoveRight = false;
         this.isMoveLeft = false;
@@ -13,7 +18,8 @@ class GameManager {
         this.gameLoopInterval = gameLoopInterval;
         this.actorScrollHeight = canvas.height / 2;
 
-        loadMap('map/newMap.json', this.mapManager);
+        let currentLevelLet = GameManager.currentLevel;
+        loadMap('Map/JsonLevels/level_' + currentLevelLet + '.json', this.mapManager);
         initEventListeners(this)
     }
 
@@ -25,7 +31,6 @@ class GameManager {
         this.physicsManager.jumpCalculatePosition();
 
         if(this.actor.bullet.isBulletFired) {
-            console.log('fired')
             this.physicsManager.bulletCalculatePosition();
             this.collisionManager.checkEnemyCollisionWithBullet();
         }
@@ -42,17 +47,55 @@ class GameManager {
             let actorHeightDiff = Math.floor(Math.abs(this.actor.yActorLocation - this.actorScrollHeight));
             this.gameScore += actorHeightDiff;
             document.getElementById('score').innerText  = this.gameScore;
-            this.actor.yActorLocation = this.actorScrollHeight
+            this.actor.yActorLocation = this.actorScrollHeight;
             this.mapManager.scrollMap(actorHeightDiff);
         }
 
-        let currentBlock = this.collisionManager.checkActorCollisionWithBlocks();
-        if(currentBlock) {
-            this.actor.yActorSpeed = currentBlock.speedFromBlock;
+        let collisionBlock = this.collisionManager.checkActorCollisionWithBlocks();
+        if(collisionBlock) {
+            collisionBlock.blockCollisionWithActorAction();
+            this.actor.yActorSpeed = collisionBlock.speedFromBlock;
         }
 
-        if(this.collisionManager.checkActorCollisionWithEnemy() || this.actor.yActorLocation >= canvas.height){
-            this.gameOver()
+        let collisionEnemy = this.collisionManager.checkActorCollisionWithEnemy();
+        if(collisionEnemy) {
+            if(collisionEnemy.yEnemyLocation > this.actor.yActorLocation) {
+                collisionEnemy.enemyCollisionWithActorAction(true);
+            }
+            else {
+                collisionEnemy.enemyCollisionWithActorAction(false);
+                this.gameOver();
+            }
+        }
+
+        let collisionUnit = this.collisionManager.checkActorCollisionWithGameUnit();
+        if(collisionUnit) {
+            if(collisionUnit.yUnitLocation > this.actor.yActorLocation) {
+                collisionUnit.gameUnitCollisionAction(true);
+            }
+            else {
+                collisionUnit.gameUnitCollisionAction(false);
+            }
+
+            if(collisionUnit.gameUnitType === 'Spring') {
+                this.actor.yActorSpeed = collisionUnit.speedFromSpring;
+            }
+
+            if(collisionUnit.gameUnitType === 'Portal') {
+                console.log(GameManager.currentLevel, this.levelNumber);
+                if(GameManager.currentLevel === this.levelNumber){
+                    this.gameOver()
+                }
+                else {
+                    GameManager.currentLevel++;
+                    new GameManager(15, this.levelNumber).startGameLoop();
+                    this.levelOver()
+                }
+            }
+        }
+
+        if(this.actor.yActorLocation >= canvas.height){
+            this.gameOver();
         }
 
         for(let block of this.mapManager.blockMasInCurrentField) {
@@ -63,11 +106,30 @@ class GameManager {
             enemy.enemyAction();
         }
 
+        for(let unit of this.mapManager.gameUnitMasInCurrentField) {
+            unit.gameUnitAction();
+        }
+
         this.mapManager.drawMap();
     }
 
-    gameOver(){
+    levelOver() {
+        clearInterval(this.timerDescriptionGameLoop);
+        return;
+    }
+
+    gameOver() {
         clearInterval(this.timerDescriptionGameLoop);
         canvas.style.visibility = "hidden";
+        let highScoreTable = document.getElementById('highScoreTableOl');
+
+        highScoreTable.style.visibility = 'visible';
+        this.highScoreTable.addRecordToHighScoreTable({'level': GameManager.currentLevel, 'score': this.gameScore});
+        for(let record of this.highScoreTable.getHighScoreTable()) {
+            let recordHTML = document.createElement('li');
+            recordHTML.innerText = "Level: " + record.level + "  Score: " + record.score;
+            highScoreTable.append(recordHTML)
+        }
+        return;
     }
 }

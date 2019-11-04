@@ -16,5 +16,6 @@ class ActorClass {
         this.actorShootStateImage = new Image();
         this.actorShootStateImage.src = 'images/Actor/ActorShoot.png';
         this.actorCurrentStateImage = this.actorLeftStateImage;
+        this.actorShootSound = new Audio('sounds/ActorSounds/actorShoot.mp3');
     }
 }

@@ -7,9 +7,3 @@ canvas{
     left: 28%;
     border: 8px double black;
 }
-
-#gameScore{
-    font-size: 300%;
-    position: absolute;
-    top: 10%;
-}

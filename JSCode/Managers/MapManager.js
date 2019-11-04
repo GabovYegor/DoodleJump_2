@@ -1,6 +1,3 @@
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-
 class MapManager {
     constructor(actor = new ActorClass()) {
         this.tilesData = 0;
@@ -12,9 +9,11 @@ class MapManager {
         this.enemyMasInCurrentField = [];
         this.blockMas = [];
         this.blockMasInCurrentField = [];
+        this.gameUnitMas = [];
+        this.gameUnitMasInCurrentField = [];
         this.actor = actor;
         canvas.height = window.innerHeight - 30;
-        canvas.style.backgroundImage = 'url("images/FieldSettings/Background.png")'
+        canvas.style.backgroundImage = 'url("images/GameUnits/Background.png")'
     }
 
     parseMapProperties(map) {
@@ -27,6 +26,7 @@ class MapManager {
         this.setUpObjects(objMap.layers[0].data, objMap.layers[1].objects);
         this.updateBlockMasInCurrentField();
         this.updateEnemyMasInCurrentField();
+        this.updateGameUnitMasInCurrentField();
     }
 
     getObjectByID(objMas, ID) {
@@ -41,6 +41,7 @@ class MapManager {
     setUpObjects(tilesData, objMas) {
         let blockFactory = new BlockFactory();
         let enemyFactory = new EnemyFactory();
+        let gameUnitFactory = new GameUnitFactory();
         for(let i = 0; i < this.mapHeight; ++i){
             for(let j = 0; j < this.mapWidth; ++j) {
                 let currentObj = this.getObjectByID(objMas, tilesData[this.mapWidth * i + j]);
@@ -56,6 +57,13 @@ class MapManager {
                     if(currentObj.type === 'Enemy') {
                         this.enemyMas.push(
                             enemyFactory.createEnemy(currentObj.name, currentObj.gid,
+                                currentObj.width, currentObj.height,
+                                j * this.tileWidth, i * this.tileHeight - yOffset));
+                    }
+
+                    if(currentObj.type === 'GameUnit') {
+                        this.gameUnitMas.push(
+                            gameUnitFactory.createGameUnit(currentObj.name, currentObj.gid,
                                 currentObj.width, currentObj.height,
                                 j * this.tileWidth, i * this.tileHeight - yOffset));
                     }
@@ -76,7 +84,19 @@ class MapManager {
         })
     }
 
-    pushDownBlocks(actorHeightDiff){
+    updateGameUnitMasInCurrentField() {
+        this.gameUnitMasInCurrentField = this.gameUnitMas.filter(function (el) {
+            return ( el.yUnitLocation > 0 && el.yUnitLocation < canvas.height )
+        })
+    }
+
+    pushDownGameUnits(actorHeightDiff) {
+        for(let unit of this.gameUnitMas) {
+            unit.yUnitLocation += actorHeightDiff;
+        }
+    }
+
+    pushDownBlocks(actorHeightDiff) {
         for(let block of this.blockMas) {
             block.yBlockLocation += actorHeightDiff;
         }
@@ -92,10 +112,12 @@ class MapManager {
     }
 
     scrollMap(actorHeightDiff) {
+        this.pushDownGameUnits(actorHeightDiff);
         this.pushDownBlocks(actorHeightDiff);
         this.pushDownEnemies(actorHeightDiff);
         this.updateEnemyMasInCurrentField();
         this.updateBlockMasInCurrentField();
+        this.updateGameUnitMasInCurrentField();
     }
 
     drawBlocks() {
@@ -109,6 +131,13 @@ class MapManager {
         for(let enemy of this.enemyMasInCurrentField) {
             ctx.drawImage(enemy.enemyImage, enemy.xEnemyLocation, enemy.yEnemyLocation,
                           enemy.enemyWidth, enemy.enemyHeight)
+        }
+    }
+
+    drawGameUnits(){
+        for(let unit of this.gameUnitMasInCurrentField) {
+            ctx.drawImage(unit.gameUnitImageCurrentState, unit.xUnitLocation, unit.yUnitLocation,
+                          unit.unitWidth, unit.unitHeight)
         }
     }
 
@@ -126,6 +155,7 @@ class MapManager {
         ctx.clearRect(0, 0, this.mapWidth * this.tileWidth, this.mapHeight * this.tileHeight);
         this.drawBlocks();
         this.drawEnemies();
+        this.drawGameUnits();
         this.drawActor();
         if(this.actor.bullet.isBulletFired) {
             this.drawBullet();
