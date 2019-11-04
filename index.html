@@ -4,16 +4,19 @@
     <meta charset="UTF-8">
     <title>Doodle Jump</title>
     <link href='styles/MainStyle.css', rel='stylesheet'>
-    <link href='styles/GameScoreStyle.css', rel='stylesheet'>
+    <link href='styles/GameStyle.css' , rel='stylesheet'>
     <link href='styles/HighScoreTableStyle.css', rel='stylesheet'>
     <link rel="icon" type="image/x-icon" href="images/Actor/ActorLeft.png">
 </head>
 <body>
-    <div id="gameScore">
-        Score: <span id="score"></span>
+    <div id="gameScoreDiv">
+        <span>Score: </span> <span id="score"></span>
+    </div>
+    <div id="currentLevelNumberDiv">
+        <span>Level: </span> <span id="currentLevelNumber"></span>
     </div>
     <div id="highScoreTableDiv" style="visibility: hidden">
-        <span> KEKES </span>
+        <span id="finishStatusText">Finish Status: </span> <span id="finishStatus"></span>
         <div id="highScoreTableOl">
         </div>
     </div>
@@ -32,7 +35,6 @@
     <script src="JSCode/Factories/GameUnitFactory.js"></script>
     <script src="JSCode/Actor/Bullet.js"></script>
     <script src="JSCode/Actor/ActorClass.js"></script>
-    <script src="JSCode/Managers/SoundManager.js"></script>
     <script src="JSCode/Managers/HighScoreTableManager.js"></script>
     <script src="JSCode/Managers/PhysicsManager.js"></script>
     <script src="JSCode/Managers/MapManager.js"></script>

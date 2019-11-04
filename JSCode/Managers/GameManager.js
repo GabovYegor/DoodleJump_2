@@ -11,6 +11,9 @@ class GameManager {
         this.collisionManager = new CollisionManager(this.actor, this.mapManager);
 
         this.levelNumber = levelNumber;
+        this.currentLevelHTML = document.getElementById('currentLevelNumber');
+        this.finishStatusHTML = document.getElementById('finishStatus');
+        this.currentLevelHTML.innerText = GameManager.currentLevel;
         this.gameScore = 0;
         this.isMoveRight = false;
         this.isMoveLeft = false;
@@ -64,6 +67,7 @@ class GameManager {
             }
             else {
                 collisionEnemy.enemyCollisionWithActorAction(false);
+                this.finishStatusHTML.innerText = 'Died from the enemy';
                 this.gameOver();
             }
         }
@@ -84,6 +88,7 @@ class GameManager {
             if(collisionUnit.gameUnitType === 'Portal') {
                 console.log(GameManager.currentLevel, this.levelNumber);
                 if(GameManager.currentLevel === this.levelNumber){
+                    this.finishStatusHTML.innerText = 'Passed the game';
                     this.gameOver()
                 }
                 else {
@@ -95,6 +100,7 @@ class GameManager {
         }
 
         if(this.actor.yActorLocation >= canvas.height){
+            this.finishStatusHTML.innerText = 'Died in the void';
             this.gameOver();
         }
 
@@ -122,8 +128,7 @@ class GameManager {
         clearInterval(this.timerDescriptionGameLoop);
         canvas.style.visibility = "hidden";
         let highScoreTable = document.getElementById('highScoreTableOl');
-
-        highScoreTable.style.visibility = 'visible';
+        document.getElementById('highScoreTableDiv').style.visibility = 'visible';
         this.highScoreTable.addRecordToHighScoreTable({'level': GameManager.currentLevel, 'score': this.gameScore});
         for(let record of this.highScoreTable.getHighScoreTable()) {
             let recordHTML = document.createElement('li');

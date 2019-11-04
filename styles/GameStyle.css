@@ -1,0 +1,15 @@
+#gameScoreDiv{
+    font-size: 300%;
+    position: absolute;
+    top: 10%;
+    background-color: black;
+    color: white;
+}
+
+#currentLevelNumberDiv {
+    font-size: 300%;
+    position: absolute;
+    top: 20%;
+    background-color: black;
+    color: white;
+}

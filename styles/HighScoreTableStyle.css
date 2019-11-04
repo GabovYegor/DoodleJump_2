@@ -5,7 +5,6 @@
     width: 50%;
 }
 
-
 #highScoreTableOl > li:nth-child(2n) {
     background: white; /* Цвет фона */
 }
@@ -17,5 +16,13 @@
 
 #highScoreTableOl > li {
     font-size: 300%;
-    margin: 2% 25%;
+    margin: 2%;
+}
+
+#finishStatus {
+    font-size: 300%;
+}
+
+#finishStatusText {
+    font-size: 300%;
 }
