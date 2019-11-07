@@ -3,16 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Doodle Jump</title>
+    <link href='styles/RegistationStyle.css', rel='stylesheet'>
     <link href='styles/MainStyle.css', rel='stylesheet'>
     <link href='styles/GameStyle.css' , rel='stylesheet'>
     <link href='styles/HighScoreTableStyle.css', rel='stylesheet'>
+    <link href='https://www.w3schools.com/w3css/4/w3.css', rel='stylesheet'>
     <link rel="icon" type="image/x-icon" href="images/Actor/ActorLeft.png">
 </head>
 <body>
-    <div id="gameScoreDiv">
+    <div id="RegistrationDiv">
+        <label>Регистрация для входа</label>
+        <br>
+        <input placeholder="Name" id="RegistrationName">
+        <br>
+        <button class="w3-btn" onclick="startPlay()">Start Play</button>
+    </div>
+
+    <div id="gameScoreDiv" style="visibility: hidden">
         <span>Score: </span> <span id="score"></span>
     </div>
-    <div id="currentLevelNumberDiv">
+    <div id="currentLevelNumberDiv" style="visibility: hidden">
         <span>Level: </span> <span id="currentLevelNumber"></span>
     </div>
     <div id="highScoreTableDiv" style="visibility: hidden">
@@ -40,7 +50,6 @@
     <script src="JSCode/Managers/MapManager.js"></script>
     <script src="JSCode/Managers/CollisionManager.js"></script>
     <script src="JSCode/Managers/GameManager.js"></script>
-    <script src="JSCode/helper.js"></script>
     <script src="JSCode/Main.js"></script>
 </body>
 </html>

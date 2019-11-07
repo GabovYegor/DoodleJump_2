@@ -1,6 +1,3 @@
-// gameLoopInterval, XActorSpeed, YActorSpeed, BackGroundColor, AccelarationOfGravity, ActorStyle (Abstract Factory)
-// mapToLoad
-
 class GameManager {
     static currentLevel;
     constructor(gameLoopInterval = 20, levelNumber = 0) {
@@ -11,9 +8,10 @@ class GameManager {
         this.collisionManager = new CollisionManager(this.actor, this.mapManager);
 
         this.levelNumber = levelNumber;
-        this.currentLevelHTML = document.getElementById('currentLevelNumber');
+        document.getElementById('currentLevelNumberDiv').style.visibility = 'visible';
+        document.getElementById('gameScoreDiv').style.visibility = 'visible';
         this.finishStatusHTML = document.getElementById('finishStatus');
-        this.currentLevelHTML.innerText = GameManager.currentLevel;
+        document.getElementById('currentLevelNumber').innerText = GameManager.currentLevel;
         this.gameScore = 0;
         this.isMoveRight = false;
         this.isMoveLeft = false;
@@ -123,18 +121,61 @@ class GameManager {
         clearInterval(this.timerDescriptionGameLoop);
         return;
     }
-
     gameOver() {
         clearInterval(this.timerDescriptionGameLoop);
         canvas.style.visibility = "hidden";
         let highScoreTable = document.getElementById('highScoreTableOl');
         document.getElementById('highScoreTableDiv').style.visibility = 'visible';
-        this.highScoreTable.addRecordToHighScoreTable({'level': GameManager.currentLevel, 'score': this.gameScore});
+        this.highScoreTable.addRecordToHighScoreTable(
+            {'name': document.getElementById('RegistrationName').value,
+                       'level': GameManager.currentLevel, 'score': this.gameScore});
         for(let record of this.highScoreTable.getHighScoreTable()) {
             let recordHTML = document.createElement('li');
-            recordHTML.innerText = "Level: " + record.level + "  Score: " + record.score;
+            recordHTML.innerText = "Name: " + record.name +" Level: " + record.level + "  Score: " + record.score;
             highScoreTable.append(recordHTML)
         }
         return;
     }
+}
+
+function initEventListeners(game) {
+    addEventListener('keydown', function (e) {
+        if (e.code === 'ArrowRight') {
+            game.isMoveRight = true;
+            if(game.actor.actorCurrentStateImage !== game.actor.actorShootStateImage) {
+                game.actor.actorCurrentStateImage = game.actor.actorRightStateImage;
+            }
+        }
+
+        if (e.code === 'ArrowLeft') {
+            game.isMoveLeft = true;
+            if(game.actor.actorCurrentStateImage !== game.actor.actorShootStateImage) {
+                game.actor.actorCurrentStateImage = game.actor.actorLeftStateImage;
+            }
+        }
+
+        if(e.code === 'Space') {
+            game.actor.actorCurrentStateImage = game.actor.actorShootStateImage;
+            game.actor.bullet.isBulletFired = true;
+            if(game.actor.bullet.yBulletLocation < 0) {
+                game.actor.bullet.xBulletLocation = game.actor.xActorLocation + game.actor.actorWidth / 2;
+                game.actor.bullet.yBulletLocation = game.actor.yActorLocation;
+                game.actor.actorShootSound.play();
+            }
+        }
+    });
+
+    addEventListener('keyup', function (e) {
+        if(e.code === 'ArrowRight'){
+            game.isMoveRight = false;
+        }
+
+        if(e.code === 'ArrowLeft'){
+            game.isMoveLeft = false;
+        }
+
+        if (e.code === 'Space') {
+            game.actor.actorCurrentStateImage = game.actor.actorLeftStateImage;
+        }
+    });
 }

@@ -5,5 +5,5 @@ body{
 canvas{
     position: absolute;
     left: 28%;
-    border: 8px double black;
+    /*border: 8px double black;*/
 }

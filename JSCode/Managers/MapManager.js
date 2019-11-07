@@ -162,3 +162,14 @@ class MapManager {
         }
     }
 }
+
+function loadMap(path, map) {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200) {
+            map.parseMapProperties(request.responseText)
+        }
+    };
+    request.open("GET", path, false);
+    request.send();
+}

@@ -1,0 +1,22 @@
+#RegistrationDiv {
+    position: absolute;
+    font-size: 300%;
+    top: 30%;
+    left: 40%;
+    border: 8px double black;
+    background-color: green;
+}
+
+#RegistrationDiv > label {
+    margin: 5%;
+}
+
+#RegistrationDiv > input {
+    margin: 5% 0%;
+}
+
+#RegistrationDiv > button {
+    margin: 10px 30%;
+    background-color: black;
+    color: white;
+}
